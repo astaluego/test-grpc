@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "user/user.proto";
+
+service Route {
+  rpc New (User) returns (Response) {}
+  rpc Edit (User) returns (Response) {}
+  rpc Delete (User) returns (Response) {}
+  rpc List (User) returns (Response) {}
+}
