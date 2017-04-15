@@ -3,6 +3,7 @@ syntax = "proto3";
 import "customer/customer.proto";
 
 service Route {
+  rpc Connect (Customer) returns (Response) {}
   rpc New (Customer) returns (Response) {}
   rpc Edit (Customer) returns (Response) {}
   rpc Delete (Customer) returns (Response) {}
