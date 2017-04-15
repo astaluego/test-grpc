@@ -53,11 +53,12 @@ func main() {
 		case "exit":
 			return
 		default:
-			fmt.Println("Command not found")
+			fmt.Println("Error: Command not found")
 			continue
 		}
 		if err != nil {
-			log.Fatalf("could not greet: %v", err)
+			log.Printf("Error: %s", err.Error())
+			continue
 		}
 		log.Printf("Succes: %s", response.Message)
 	}

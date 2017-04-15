@@ -30,8 +30,8 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Customer struct {
-	Email    string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
-	Password string `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
+	Email    string   `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	Password []string `protobuf:"bytes,2,rep,name=password" json:"password,omitempty"`
 }
 
 func (m *Customer) Reset()                    { *m = Customer{} }

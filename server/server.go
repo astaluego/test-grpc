@@ -22,30 +22,57 @@ var engine = InitEngine()
 
 type server struct{}
 
-//TODO verifier si l'adresse n'existe pas
+// New customer in database
 func (s *server) New(ctx context.Context, in *customer.Customer) (*customer.Response, error) {
-	_, err := engine.Insert(in)
+
+	// Verify if email is available
+	var user customer.Customer
+	has, err := engine.Where("email = ?", in.Email).Get(&user)
+	if err != nil {
+		return nil, err
+	} else if has == true {
+		return nil, fmt.Errorf("email %s already exists", in.Email)
+	}
+
+	// Insert customer on database
+	_, err = engine.Insert(in)
 	if err != nil {
 		return nil, err
 	}
-	results, err := engine.Query("select * from customer")
-	if err != nil {
-		return nil, err
-	}
-	fmt.Print(results)
 	return &customer.Response{Message: "New " + in.Email}, nil
 }
 
+// Edit customer in database
 func (s *server) Edit(ctx context.Context, in *customer.Customer) (*customer.Response, error) {
 	return &customer.Response{Message: "Edit " + in.Email}, nil
 }
 
+// Delete customer in database
 func (s *server) Delete(ctx context.Context, in *customer.Customer) (*customer.Response, error) {
+
 	return &customer.Response{Message: "Delete " + in.Email}, nil
 }
 
+// List customer of database
 func (s *server) List(ctx context.Context, in *customer.Customer) (*customer.Response, error) {
-	return &customer.Response{Message: "List " + in.Email}, nil
+	var users []customer.Customer
+	var results string
+
+	//Select customer in database
+	err := engine.Find(&users)
+	if err != nil {
+		return nil, err
+	}
+	if len(users) == 0 {
+		results = "empty"
+	}
+	for i, user := range users {
+		if i != 0 {
+			results += ", "
+		}
+		results += user.Email
+	}
+	return &customer.Response{Message: "List " + results}, nil
 }
 
 // InitEngine init database
