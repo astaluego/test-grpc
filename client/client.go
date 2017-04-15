@@ -8,7 +8,7 @@ import (
 	"os"
 
 	service "github.com/astaluego/test-grpc/client/pkg/protobuf"
-	"github.com/astaluego/test-grpc/client/pkg/protobuf/user"
+	"github.com/astaluego/test-grpc/client/pkg/protobuf/customer"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -19,6 +19,7 @@ var (
 	serverAddr         = flag.String("server_addr", "127.0.0.1:4242", "The server address in the format of host:port")
 	serverHostOverride = flag.String("server_host_override", "x.test.youtube.com", "The server name use to verify the hostname returned by TLS handshake")
 	email              = flag.String("email", "user@domain.com", "Email adress")
+	password           = flag.String("password", "password", "Password")
 )
 
 func main() {
@@ -35,30 +36,25 @@ func main() {
 	// Init service Route
 	client := service.NewRouteClient(conn)
 
-	var response *user.Response
+	var response *customer.Response
 
 	// Read
-LOOP:
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		switch scanner.Text() {
 		case "1":
-			response, err = client.New(context.Background(), &user.User{Email: *email})
-			break
+			response, err = client.New(context.Background(), &customer.Customer{Email: *email, Password: *password})
 		case "2":
-			response, err = client.Edit(context.Background(), &user.User{Email: *email})
-			break
+			response, err = client.Edit(context.Background(), &customer.Customer{Email: *email})
 		case "3":
-			response, err = client.Delete(context.Background(), &user.User{Email: *email})
-			break
+			response, err = client.Delete(context.Background(), &customer.Customer{Email: *email})
 		case "4":
-			response, err = client.List(context.Background(), &user.User{Email: *email})
-			break
+			response, err = client.List(context.Background(), &customer.Customer{Email: *email})
 		case "exit":
 			return
 		default:
 			fmt.Println("Command not found")
-			goto LOOP
+			continue
 		}
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)

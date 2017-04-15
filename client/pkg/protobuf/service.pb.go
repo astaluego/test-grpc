@@ -15,7 +15,7 @@ package service
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
-import user "github.com/astaluego/test-grpc/client/pkg/protobuf/user"
+import customer "github.com/astaluego/test-grpc/client/pkg/protobuf/customer"
 
 import (
 	context "golang.org/x/net/context"
@@ -44,10 +44,10 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Route service
 
 type RouteClient interface {
-	New(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error)
-	Edit(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error)
-	Delete(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error)
-	List(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error)
+	New(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error)
+	Edit(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error)
+	Delete(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error)
+	List(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error)
 }
 
 type routeClient struct {
@@ -58,8 +58,8 @@ func NewRouteClient(cc *grpc.ClientConn) RouteClient {
 	return &routeClient{cc}
 }
 
-func (c *routeClient) New(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error) {
-	out := new(user.Response)
+func (c *routeClient) New(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error) {
+	out := new(customer.Response)
 	err := grpc.Invoke(ctx, "/Route/New", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
@@ -67,8 +67,8 @@ func (c *routeClient) New(ctx context.Context, in *user.User, opts ...grpc.CallO
 	return out, nil
 }
 
-func (c *routeClient) Edit(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error) {
-	out := new(user.Response)
+func (c *routeClient) Edit(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error) {
+	out := new(customer.Response)
 	err := grpc.Invoke(ctx, "/Route/Edit", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func (c *routeClient) Edit(ctx context.Context, in *user.User, opts ...grpc.Call
 	return out, nil
 }
 
-func (c *routeClient) Delete(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error) {
-	out := new(user.Response)
+func (c *routeClient) Delete(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error) {
+	out := new(customer.Response)
 	err := grpc.Invoke(ctx, "/Route/Delete", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
@@ -85,8 +85,8 @@ func (c *routeClient) Delete(ctx context.Context, in *user.User, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *routeClient) List(ctx context.Context, in *user.User, opts ...grpc.CallOption) (*user.Response, error) {
-	out := new(user.Response)
+func (c *routeClient) List(ctx context.Context, in *customer.Customer, opts ...grpc.CallOption) (*customer.Response, error) {
+	out := new(customer.Response)
 	err := grpc.Invoke(ctx, "/Route/List", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
@@ -97,10 +97,10 @@ func (c *routeClient) List(ctx context.Context, in *user.User, opts ...grpc.Call
 // Server API for Route service
 
 type RouteServer interface {
-	New(context.Context, *user.User) (*user.Response, error)
-	Edit(context.Context, *user.User) (*user.Response, error)
-	Delete(context.Context, *user.User) (*user.Response, error)
-	List(context.Context, *user.User) (*user.Response, error)
+	New(context.Context, *customer.Customer) (*customer.Response, error)
+	Edit(context.Context, *customer.Customer) (*customer.Response, error)
+	Delete(context.Context, *customer.Customer) (*customer.Response, error)
+	List(context.Context, *customer.Customer) (*customer.Response, error)
 }
 
 func RegisterRouteServer(s *grpc.Server, srv RouteServer) {
@@ -108,7 +108,7 @@ func RegisterRouteServer(s *grpc.Server, srv RouteServer) {
 }
 
 func _Route_New_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(user.User)
+	in := new(customer.Customer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -120,13 +120,13 @@ func _Route_New_Handler(srv interface{}, ctx context.Context, dec func(interface
 		FullMethod: "/Route/New",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RouteServer).New(ctx, req.(*user.User))
+		return srv.(RouteServer).New(ctx, req.(*customer.Customer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Route_Edit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(user.User)
+	in := new(customer.Customer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -138,13 +138,13 @@ func _Route_Edit_Handler(srv interface{}, ctx context.Context, dec func(interfac
 		FullMethod: "/Route/Edit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RouteServer).Edit(ctx, req.(*user.User))
+		return srv.(RouteServer).Edit(ctx, req.(*customer.Customer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Route_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(user.User)
+	in := new(customer.Customer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -156,13 +156,13 @@ func _Route_Delete_Handler(srv interface{}, ctx context.Context, dec func(interf
 		FullMethod: "/Route/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RouteServer).Delete(ctx, req.(*user.User))
+		return srv.(RouteServer).Delete(ctx, req.(*customer.Customer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Route_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(user.User)
+	in := new(customer.Customer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func _Route_List_Handler(srv interface{}, ctx context.Context, dec func(interfac
 		FullMethod: "/Route/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RouteServer).List(ctx, req.(*user.User))
+		return srv.(RouteServer).List(ctx, req.(*customer.Customer))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -207,13 +207,13 @@ var _Route_serviceDesc = grpc.ServiceDesc{
 func init() { proto.RegisterFile("service.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 117 bytes of a gzipped FileDescriptorProto
+	// 122 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
-	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x97, 0xe2, 0x2f, 0x2d, 0x4e, 0x2d, 0xd2,
-	0x07, 0x11, 0x10, 0x01, 0xa3, 0x0a, 0x2e, 0xd6, 0xa0, 0xfc, 0xd2, 0x92, 0x54, 0x21, 0x49, 0x2e,
-	0x66, 0xbf, 0xd4, 0x72, 0x21, 0x56, 0xbd, 0xd0, 0xe2, 0xd4, 0x22, 0x29, 0x4e, 0xbd, 0xa0, 0xd4,
-	0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x25, 0x06, 0x21, 0x29, 0x2e, 0x16, 0xd7, 0x94, 0xcc, 0x12,
-	0xac, 0x72, 0x32, 0x5c, 0x6c, 0x2e, 0xa9, 0x39, 0xa9, 0x25, 0xa9, 0xb8, 0x74, 0xfa, 0x64, 0x16,
-	0x63, 0xd5, 0x99, 0xc4, 0x06, 0x76, 0x80, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x45, 0x74, 0x92,
-	0xc3, 0xa2, 0x00, 0x00, 0x00,
+	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x97, 0x12, 0x4f, 0x2e, 0x2d, 0x2e, 0xc9,
+	0xcf, 0x4d, 0x2d, 0xd2, 0x87, 0x31, 0x20, 0x12, 0x46, 0x1d, 0x8c, 0x5c, 0xac, 0x41, 0xf9, 0xa5,
+	0x25, 0xa9, 0x42, 0xb2, 0x5c, 0xcc, 0x7e, 0xa9, 0xe5, 0x42, 0x9c, 0x7a, 0xce, 0x50, 0x15, 0x52,
+	0x9c, 0x7a, 0x41, 0xa9, 0xc5, 0x05, 0xf9, 0x79, 0xc5, 0xa9, 0x4a, 0x0c, 0x42, 0x72, 0x5c, 0x2c,
+	0xae, 0x29, 0x99, 0x25, 0x38, 0xe5, 0x15, 0xb8, 0xd8, 0x5c, 0x52, 0x73, 0x52, 0x4b, 0x52, 0xf1,
+	0x99, 0xe0, 0x93, 0x59, 0x8c, 0xd3, 0x84, 0x24, 0x36, 0xb0, 0x8b, 0x8c, 0x01, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0x48, 0xa6, 0xed, 0x0b, 0xbb, 0x00, 0x00, 0x00,
 }
