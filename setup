@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# COLOR
+ORANGE='\033[0;33m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+GREY='\033[1;30m'
+NC='\033[0m'
+
+# VAR
+Server=./server/
+Client=./client/
+RSAKeysDir=keys/
+RSAPrivateKey=app.rsa
+RSAPublicKey=app.rsa.pub
+
+############## RSA ##############
+printf "${ORANGE}[1/2]${NC}"
+printf " ${RED}Generate RSA keys${NC}\n\n"
+
+# Create directory for RSA keys in server
+printf "${GREY}*  Server side${NC}\n"
+if [ ! -d "$Server$RSAKeysDir" ];
+then :
+	mkdir "$Server$RSAKeysDir"
+	printf "${GREEN}[ok]${NC} Directory created ($Server$RSAKeysDir)\n"
+else
+	printf "${GREEN}[ok]${NC} Directory already exists ($Server$RSAKeysDir)\n"
+fi
+
+# Generate private RSA key
+if [ ! -f "$Server$RSAKeysDir$RSAPrivateKey" ];
+then :
+	openssl genrsa -out "$Server$RSAKeysDir$RSAPrivateKey" 1024
+	printf "${GREEN}[ok]${NC} Private RSA key generated ($Server$RSAKeysDir$RSAPrivateKey)\n"
+else
+   printf "${GREEN}[ok]${NC} Private RSA key already exists ($Server$RSAKeysDir$RSAPrivateKey)\n"
+fi
+
+# Keep public RSA key
+if [ ! -f "$Server$RSAKeysDir$RSAPublicKey" ];
+then :
+	openssl rsa -in "$Server$RSAKeysDir$RSAPrivateKey" -pubout > "$Server$RSAKeysDir$RSAPublicKey"
+	printf "${GREEN}[ok]${NC} Public RSA key generated ($Server$RSAKeysDir$RSAPublicKey)\n"
+else
+   printf "${GREEN}[ok]${NC} Public RSA key already exists ($Server$RSAKeysDir$RSAPublicKey)\n"
+fi
+
+# Create directory for RSA keys in client
+printf "\n${GREY}*  Client side${NC}\n"
+if [ ! -d "$Client$RSAKeysDir" ];
+then :
+	mkdir "$Client$RSAKeysDir"
+	printf "${GREEN}[ok]${NC} Directory created ($Client$RSAKeysDir)\n"
+else
+	printf "${GREEN}[ok]${NC} Directory already exists ($Client$RSAKeysDir)\n"
+fi
+
+# Copy public RSA keys in client
+results=$(diff $Server$RSAKeysDir$RSAPublicKey $Client$RSAKeysDir$RSAPublicKey)
+if [ $? -ne 0 ]
+then :
+	cp "$Server$RSAKeysDir$RSAPublicKey" "$Client$RSAKeysDir$RSAPublicKey"
+	printf "${GREEN}[ok]${NC} Copy of RSA public key in client ($Client$RSAKeysDir$RSAPublicKey)\n"
+else
+	printf "${GREEN}[ok]${NC} Copy of RSA public key in client already exist ($Client$RSAKeysDir$RSAPublicKey)\n"
+fi
+
+
+# VAR
+DEFAULT_HOST=127.0.0.1
+DEFAULT_PORT=5432
+DEFAULT_USER=turlutte
+DEFAULT_DATABASE=turlutte
+DEFAULT_PASSWORD=anastasia
+
+############## DATABASE ##############
+printf "\n${ORANGE}[2/2]${NC}"
+printf " ${RED}Install Postgres database${NC}\n\n"
+
+
+# Get Hostname
+printf "${GREY}* Hostname${NC} (default ${DEFAULT_HOST}) : "
+read HOST
+if [ -z "$HOST" ];
+then
+    HOST=${DEFAULT_HOST}
+fi
+
+# Get port
+printf "${GREY}* Port${NC} (default ${DEFAULT_PORT}) : "
+read PORT
+if [ -z "$PORT" ];
+then
+    PORT=${DEFAULT_PORT}
+fi
+
+# Get username
+printf "${GREY}* Username${NC} (default ${DEFAULT_USER}) : "
+read USER
+if [ -z "$USER" ];
+then
+    USER=${DEFAULT_USER}
+fi
+
+# Get password
+printf "${GREY}* Password${NC} (default ${DEFAULT_PASSWORD}) : "
+read -s PASSWORD
+if [ -z "$PASSWORD" ];
+then
+    PASSWORD=${DEFAULT_PASSWORD}
+fi
+
+# Get database
+printf "\n${GREY}* Database${NC} (default ${DEFAULT_DATABASE}) : "
+read DATABASE
+if [ -z "$DATABASE" ];
+then
+    DATABASE=${DEFAULT_DATABASE}
+fi
+
+printf "${GREEN}[ok]${NC} variables for connections to database are set\n\n"
+
+# Create tables
+printf "\n${GREY}* Create table${NC}\n"
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -p ${PORT} -U ${USER} -d ${DATABASE} -c "CREATE TABLE IF NOT EXISTS test (email varchar(255) UNIQUE, password varchar(255), token varchar(255));"
